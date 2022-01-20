@@ -1,0 +1,23 @@
+.Card {
+    border: 1px solid #ddd;
+    padding: 8px 20px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.Card:hover { 
+    opacity: 1.0; 
+    cursor: pointer;
+}
+
+.Card:nth-of-type(2n) {
+    background-color: #f5f5f5;
+}
+
+.Card-brand {
+    font-weight: bold;
+}
+
+.Card-type {
+    color: #AAA;
+}
