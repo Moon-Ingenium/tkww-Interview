@@ -1,69 +1,67 @@
-import React, { useState, useEffect } from "react";
-import API from "./api";
-import Card from "./components/Card";
+import React, { useState, useEffect } from 'react';
+import API from './lib/api';
+import Header from './components/Header/Header';
+import Card from './components/Card/Card'
+import Footer from './components/Footer/Footer';
+import Search from './components/Search/Search';
+import MainSection from './components/Sections/MainSection';
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchProduct, setProductInput] = useState("");
+  const [search, setSearch] = useState({ name: '', type: '' });
 
   useEffect(() => {
-    API.getProduct().then((res) => {
-      setProducts(res.data);
-    });
-  });
+    API.getProducts().then((res) => {
+      const { data } = res;
+      setProducts(data)
+    })
+  }, []);
 
-  const cardResults = [];
+  const cardResults = products.filter((product) => {
+    if (search.name === '' && search.type === '') return true;
 
-  for (let i = 0; i < products.length; i++) {
-    if (searchProduct || searchInput) {
-      if (searchProduct && products[i].type.match(searchProduct)) {
-        cardResults.push(<Card cardResults={products[i]} />);
-      }
-      if (searchInput && products[i].name.match(searchInput)) {
-        cardResults.push(<Card cardResults={products[i]} />);
-      }
-    } else {
-      cardResults.push(<Card cardResults={products[i]} />);
+    const { name, type } = product;
+
+    if (search.name && !name.toLowerCase().match(search.name.toLowerCase())) {
+      return false;
     }
+
+    if (search.type && !type.toLowerCase().match(search.type.toLowerCase())) {
+      return false;
+    }
+
+    return true;
+  })
+
+  const renderCards = () => {
+    return (
+      cardResults.map((product, index) => (<Card key={index} product={product} />))
+    )
+  }
+
+  const getTitle = () => {
+    let title = 'Results'
+
+    if (search.name) {
+      title += ` for '${search.name.toLowerCase()}'`
+    }
+
+    if (search.type) {
+      title += ` in ${search.type.toLowerCase()}`
+    }
+
+    return title
   }
 
   return (
     <>
-      <div className="jumbotron jumbotron-fluid">
-        <div className="container">
-          <h1 className="text">Interview Header</h1>
-        </div>
-      </div>
-      <div className="container">
-        <form>
-          <label>
-            Search:
-            <input
-              type="text"
-              name="search"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-            />
-          </label>
-        </form>
-      </div>
-      <label for="type">Choose a product type:</label>
-      <select onChange={(e) => setProductInput(e.target.value)}>
-        <option value="RETAIL">Retail</option>
-        <option value="CASH">Cash</option>
-      </select>
-      <div className="container">
-        <h1>Results: </h1>
-        <div>{cardResults}</div>
-      </div>
-      <div style={{ marginTop: 30 }} className="footer">
-        {" "}
-        <div className="container">
-          <h1>Interview Footer </h1>
-        </div>
-        <p>Built with love</p>
-      </div>
+      <Header>
+        <Search searchCallback={setSearch} search={search} />
+      </Header>
+      <MainSection className={'product-list'} title={getTitle()}>
+        {renderCards()}
+      </MainSection>
+      <Footer />
     </>
   );
 }
