@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
-import './Search.css';
+import './Search.scss';
 
 export const TYPE_OPTIONS = ['Retail', 'Cash'];
 

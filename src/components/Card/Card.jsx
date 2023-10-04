@@ -1,5 +1,5 @@
 import { formatPrice } from '../../lib/utils';
-import './Card.css';
+import './Card.scss';
 import React, { useState } from 'react';
 
 export default function Card({ product }) {
