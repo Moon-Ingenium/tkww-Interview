@@ -1,0 +1,11 @@
+version: "3.3"
+services:
+  tkww-interview:
+    container_name: tkww-interview
+    working_dir: /app
+    image: node:16
+    volumes:
+      - "${PWD}:/app"
+    ports:
+      - "3000:3000"
+    command: ["yarn", "start"]
