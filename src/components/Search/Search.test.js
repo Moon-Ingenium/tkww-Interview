@@ -3,13 +3,15 @@ import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
 import Search from './Search'
 
+import { TYPE_OPTIONS } from './Search'
+
 const search = {
     name: '',
     type: 'CASH',
 }
 
 function searchCallback(data) {
-    search.name += data.name;
+    search.name = data.name;
     search.type = data.type;
 }
 
@@ -42,8 +44,9 @@ describe('Search testing', () => {
     it('Once select type is changed, It should change the state', () => {
         initRender()
         const select = screen.getByTestId('search-by-type');
-        userEvent.selectOptions(select, 'RETAIL');
-        expect(search.type).toBe('RETAIL');
+        const type = TYPE_OPTIONS[1].toLowerCase()
+        userEvent.selectOptions(select, type);
+        expect(search.type.toLowerCase()).toBe(type);
     })
 })
 
